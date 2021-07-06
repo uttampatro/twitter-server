@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { TweetList } from './TweetList';
+import { User } from './User';
 
 @Entity('tweet')
 export class Tweet extends BaseEntity {
@@ -8,6 +17,12 @@ export class Tweet extends BaseEntity {
     @Column()
     content: string;
 
-    @Column()
+    @Column({ nullable: true })
     imageURL: string;
+
+    @ManyToOne(() => User)
+    user: User;
+
+    @OneToMany(() => TweetList, tweetList => tweetList.tweet)
+    tweetList: TweetList[];
 }
