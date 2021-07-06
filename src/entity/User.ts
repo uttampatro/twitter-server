@@ -25,8 +25,6 @@ export class User extends BaseEntity {
     password: string;
 
     @OneToMany(() => Tweet, tweet => tweet.user)
-    tweet: Tweet;
+    tweet: Tweet[];
 
-    @OneToMany(() => TweetList, tweetList => tweetList)
-    tweetList: TweetList;
 }
