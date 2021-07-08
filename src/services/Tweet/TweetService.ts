@@ -26,7 +26,6 @@ class TweetService {
         tweet.imageURL = imageURL;
         tweet.user = user!;
         await tweet.save();
-        return tweet;
     }
 }
 
