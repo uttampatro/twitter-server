@@ -1,17 +1,15 @@
 import { Tweet } from '../../entity/Tweet';
 import { User } from '../../entity/User';
-import { TweetList } from '../../entity/TweetList';
 import { CreateTweetDTO } from './TweetDTO';
 
 class TweetService {
     async getTweetList() {
-        const tweetList = await TweetList.createQueryBuilder('tweetList')
-            .leftJoinAndSelect('tweetList.tweet', 'tweet')
+        const tweetList = await Tweet.createQueryBuilder('tweet')
             .leftJoinAndSelect('tweet.user', 'user')
-            .select('tweetList.id')
-            .addSelect('tweet.id')
+            .select('tweet.id')
             .addSelect('tweet.content')
             .addSelect('tweet.imageURL')
+            .addSelect('tweet.createdAt')
             .addSelect('user.id')
             .addSelect('user.username')
             .addSelect('user.email')

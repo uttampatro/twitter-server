@@ -7,7 +7,6 @@ import {
     Unique,
 } from 'typeorm';
 import { Tweet } from './Tweet';
-import { TweetList } from './TweetList';
 
 @Entity('user')
 @Unique(['email'])
@@ -26,7 +25,4 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Tweet, tweet => tweet.user)
     tweet: Tweet[];
-
-    @OneToMany(() => TweetList, tweetList => tweetList)
-    tweetList: TweetList[];
 }

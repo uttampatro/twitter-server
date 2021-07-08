@@ -1,12 +1,13 @@
 import {
     BaseEntity,
     Column,
+    CreateDateColumn,
     Entity,
+    Index,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TweetList } from './TweetList';
 import { User } from './User';
 
 @Entity('tweet')
@@ -20,9 +21,10 @@ export class Tweet extends BaseEntity {
     @Column({ nullable: true })
     imageURL: string;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, user => user.tweet)
     user: User;
 
-    @OneToMany(() => TweetList, tweetList => tweetList.tweet)
-    tweetList: TweetList[];
+    @CreateDateColumn()
+    @Index()
+    createdAt: Date;
 }
