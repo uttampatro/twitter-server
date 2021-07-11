@@ -21,6 +21,10 @@ class TweetService {
             .getMany();
         return tweetList;
     }
+    async getReplyTweet() {
+        const replyTweetList = await TweetReply.find();
+        return replyTweetList;
+    }
     async createTweet(dto: CreateTweetDTO) {
         const { userId, content, imageURL } = dto;
         const user = await User.findOne({

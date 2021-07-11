@@ -14,6 +14,17 @@ class TweetController {
             });
         }
     };
+    fetchReplyTweetList = async (req: Request, res: Response) => {
+        try {
+            const replyTweetList = await TweetService.getReplyTweet()
+            return res.json(replyTweetList);
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Something went wrong',
+            });
+        }
+    }
     createTweet = async (req: Request, res: Response) => {
         try {
             const userId = get(req, 'body.userId');

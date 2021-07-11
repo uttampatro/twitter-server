@@ -14,7 +14,8 @@ router.post('/login', UserController.loginUser);
 
 //Tweet controller
 router.get('/tweetList', TweetController.fetchTweetList);
+router.get('/replyTweetList', TweetController.fetchReplyTweetList);
 router.post('/tweet', TweetController.createTweet);
-router.post('/replyTweet', TweetController.replyTweet)
+router.post('/replyTweet', TweetController.replyTweet);
 
 export default router;
