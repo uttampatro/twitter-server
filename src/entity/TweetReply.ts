@@ -1,3 +1,4 @@
+import { User } from './User';
 import {
     BaseEntity,
     Column,
@@ -5,25 +6,23 @@ import {
     Entity,
     Index,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TweetReply } from './TweetReply';
-import { User } from './User';
+import { Tweet } from './Tweet';
 
-@Entity('tweet')
-export class Tweet extends BaseEntity {
+@Entity('tweetReply')
+export class TweetReply extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: number;
 
+    @ManyToOne(() => Tweet, tweet => tweet.id)
+    parentTweetId: number;
+
     @Column()
-    content: string;
+    replyContent: string;
 
     @Column({ nullable: true })
-    imageURL: string;
-
-    @OneToMany(() => TweetReply, tweetReply => tweetReply.parentTweetId)
-    tweetReply: TweetReply[];
+    replyImageURL: string;
 
     @ManyToOne(() => User, user => user.tweet)
     user: User;

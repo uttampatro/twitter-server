@@ -4,3 +4,9 @@ export interface CreateTweetDTO {
     imageURL: string;
 }
 
+export interface ReplyTweetDTO {
+    userId: number;
+    replyContent: string;
+    replyImageURL: string;
+    parentTweetId: number;
+}

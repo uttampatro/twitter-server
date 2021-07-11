@@ -32,6 +32,26 @@ class TweetController {
             });
         }
     };
+    replyTweet = async (req: Request, res: Response) => {
+        try {
+            const userId = get(req, 'body.userId');
+            const replyContent = get(req, 'body.replyContent');
+            const replyImageURL = get(req, 'body.replyImageURL');
+            const parentTweetId = get(req, 'body.parentTweetId');
+            const tweetReply = await TweetService.replayTweet({
+                userId: userId,
+                replyContent: replyContent,
+                replyImageURL: replyImageURL,
+                parentTweetId: parentTweetId,
+            });
+            return res.json(tweetReply);
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Something went wrong',
+            });
+        }
+    };
 }
 
 export default new TweetController();

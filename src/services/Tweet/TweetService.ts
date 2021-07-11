@@ -1,15 +1,20 @@
+import { TweetReply } from '../../entity/TweetReply';
 import { Tweet } from '../../entity/Tweet';
 import { User } from '../../entity/User';
-import { CreateTweetDTO } from './TweetDTO';
+import { CreateTweetDTO, ReplyTweetDTO } from './TweetDTO';
 
 class TweetService {
     async getTweetList() {
         const tweetList = await Tweet.createQueryBuilder('tweet')
             .leftJoinAndSelect('tweet.user', 'user')
+            .leftJoinAndSelect('tweet.tweetReply', 'tweetReply')
             .select('tweet.id')
             .addSelect('tweet.content')
             .addSelect('tweet.imageURL')
             .addSelect('tweet.createdAt')
+            .addSelect('tweetReply.id')
+            .addSelect('tweetReply.replyContent')
+            .addSelect('tweetReply.replyImageURL')
             .addSelect('user.id')
             .addSelect('user.username')
             .addSelect('user.email')
@@ -26,6 +31,19 @@ class TweetService {
         tweet.imageURL = imageURL;
         tweet.user = user!;
         await tweet.save();
+    }
+    async replayTweet(dto: ReplyTweetDTO) {
+        const { userId, parentTweetId, replyContent, replyImageURL } = dto;
+        const user = await User.findOne({
+            where: { id: userId },
+        });
+        const replayTweet = new TweetReply();
+        replayTweet.replyContent = replyContent;
+        replayTweet.replyImageURL = replyImageURL;
+        replayTweet.parentTweetId = parentTweetId;
+        replayTweet.user = user!;
+        await replayTweet.save();
+        return replayTweet;
     }
 }
 
