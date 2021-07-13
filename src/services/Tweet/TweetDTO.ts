@@ -10,3 +10,7 @@ export interface ReplyTweetDTO {
     replyImageURL: string;
     parentTweetId: number;
 }
+
+export interface FindReplyTweet {
+    parentTweetId: number;
+}

@@ -14,9 +14,12 @@ class TweetController {
             });
         }
     };
-    fetchReplyTweetList = async (req: Request, res: Response) => {
+    fetchReplyTweetByTweetId = async (req: Request, res: Response) => {
         try {
-            const replyTweetList = await TweetService.getReplyTweet()
+            const parentTweetId = get(req, 'params.id');
+            const replyTweetList = await TweetService.getReplyTweetByTweetId({
+                parentTweetId,
+            });
             return res.json(replyTweetList);
         } catch (error) {
             return res.status(500).json({
@@ -24,7 +27,7 @@ class TweetController {
                 message: 'Something went wrong',
             });
         }
-    }
+    };
     createTweet = async (req: Request, res: Response) => {
         try {
             const userId = get(req, 'body.userId');

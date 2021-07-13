@@ -1,7 +1,7 @@
 import { TweetReply } from '../../entity/TweetReply';
 import { Tweet } from '../../entity/Tweet';
 import { User } from '../../entity/User';
-import { CreateTweetDTO, ReplyTweetDTO } from './TweetDTO';
+import { CreateTweetDTO, FindReplyTweet, ReplyTweetDTO } from './TweetDTO';
 
 class TweetService {
     async getTweetList() {
@@ -21,8 +21,11 @@ class TweetService {
             .getMany();
         return tweetList;
     }
-    async getReplyTweet() {
-        const replyTweetList = await TweetReply.find();
+    async getReplyTweetByTweetId(dto: FindReplyTweet) {
+        const { parentTweetId } = dto;
+        const replyTweetList = await TweetReply.find({
+            parentTweetId: parentTweetId,
+        });
         return replyTweetList;
     }
     async createTweet(dto: CreateTweetDTO) {
