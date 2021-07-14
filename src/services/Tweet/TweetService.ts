@@ -7,14 +7,10 @@ class TweetService {
     async getTweetList() {
         const tweetList = await Tweet.createQueryBuilder('tweet')
             .leftJoinAndSelect('tweet.user', 'user')
-            .leftJoinAndSelect('tweet.tweetReply', 'tweetReply')
             .select('tweet.id')
-            .addSelect('tweet.content')
+            .addSelect('tweet.text')
             .addSelect('tweet.imageURL')
             .addSelect('tweet.createdAt')
-            .addSelect('tweetReply.id')
-            .addSelect('tweetReply.replyContent')
-            .addSelect('tweetReply.replyImageURL')
             .addSelect('user.id')
             .addSelect('user.username')
             .addSelect('user.email')
@@ -29,28 +25,36 @@ class TweetService {
         return replyTweetList;
     }
     async createTweet(dto: CreateTweetDTO) {
-        const { userId, content, imageURL } = dto;
+        const { userId, text, imageURL } = dto;
         const user = await User.findOne({
             where: { id: userId },
         });
         const tweet = new Tweet();
-        tweet.content = content;
+        tweet.text = text;
         tweet.imageURL = imageURL;
         tweet.user = user!;
         await tweet.save();
+        return tweet;
     }
-    async replayTweet(dto: ReplyTweetDTO) {
-        const { userId, parentTweetId, replyContent, replyImageURL } = dto;
+    async saveTweetReply(dto: ReplyTweetDTO) {
+        const { parentTweetId, userId, text, imageURL } = dto;
         const user = await User.findOne({
             where: { id: userId },
         });
-        const replayTweet = new TweetReply();
-        replayTweet.replyContent = replyContent;
-        replayTweet.replyImageURL = replyImageURL;
-        replayTweet.parentTweetId = parentTweetId;
-        replayTweet.user = user!;
-        await replayTweet.save();
-        return replayTweet;
+        const parentTweet = await Tweet.findOne({ id: parentTweetId });
+
+        const tweet = new Tweet();
+        tweet.text = text;
+        tweet.imageURL = imageURL;
+        tweet.user = user!;
+        const savedTweetEntry = await tweet.save();
+        const tweetReply = new TweetReply();
+        tweetReply.tweetId = savedTweetEntry.id;
+        tweetReply.parentTweetId = parentTweetId;
+        tweetReply.tweet = tweet;
+        tweetReply.parentTweet = parentTweet!;
+        await tweetReply.save();
+        return tweetReply;
     }
 }
 

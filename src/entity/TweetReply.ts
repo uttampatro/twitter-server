@@ -1,31 +1,30 @@
 import { User } from './User';
 import {
     BaseEntity,
-    Column,
     CreateDateColumn,
     Entity,
     Index,
+    JoinColumn,
     ManyToOne,
-    PrimaryGeneratedColumn,
+    OneToOne,
+    PrimaryColumn,
 } from 'typeorm';
 import { Tweet } from './Tweet';
 
 @Entity('tweetReply')
 export class TweetReply extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: number;
+    @PrimaryColumn('uuid')
+    tweetId: number;
 
-    @ManyToOne(() => Tweet, tweet => tweet.id)
+    @PrimaryColumn('uuid')
     parentTweetId: number;
 
-    @Column()
-    replyContent: string;
+    @OneToOne(() => Tweet, tweet => tweet.id)
+    @JoinColumn()
+    tweet: Tweet;
 
-    @Column({ nullable: true })
-    replyImageURL: string;
-
-    @ManyToOne(() => User, user => user.tweet)
-    user: User;
+    @ManyToOne(() => Tweet, tweet => tweet.tweetReply)
+    parentTweet: Tweet;
 
     @CreateDateColumn()
     @Index()

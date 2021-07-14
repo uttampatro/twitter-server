@@ -17,12 +17,12 @@ export class Tweet extends BaseEntity {
     id: number;
 
     @Column()
-    content: string;
+    text: string;
 
     @Column({ nullable: true })
     imageURL: string;
 
-    @OneToMany(() => TweetReply, tweetReply => tweetReply.parentTweetId)
+    @OneToMany(() => TweetReply, tweetReply => tweetReply.parentTweet)
     tweetReply: TweetReply[];
 
     @ManyToOne(() => User, user => user.tweet)

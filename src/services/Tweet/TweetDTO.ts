@@ -1,14 +1,14 @@
 export interface CreateTweetDTO {
     userId: number;
-    content: string;
+    text: string;
     imageURL: string;
 }
 
 export interface ReplyTweetDTO {
     userId: number;
-    replyContent: string;
-    replyImageURL: string;
     parentTweetId: number;
+    text: string;
+    imageURL: string;
 }
 
 export interface FindReplyTweet {

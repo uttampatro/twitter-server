@@ -31,11 +31,11 @@ class TweetController {
     createTweet = async (req: Request, res: Response) => {
         try {
             const userId = get(req, 'body.userId');
-            const content = get(req, 'body.content');
+            const text = get(req, 'body.text');
             const imageURL = get(req, 'body.imageURL');
             const tweet = await TweetService.createTweet({
                 userId: userId,
-                content: content,
+                text: text,
                 imageURL: imageURL,
             });
             return res.json(tweet);
@@ -48,18 +48,19 @@ class TweetController {
     };
     replyTweet = async (req: Request, res: Response) => {
         try {
-            const userId = get(req, 'body.userId');
-            const replyContent = get(req, 'body.replyContent');
-            const replyImageURL = get(req, 'body.replyImageURL');
-            const parentTweetId = get(req, 'body.parentTweetId');
-            const tweetReply = await TweetService.replayTweet({
-                userId: userId,
-                replyContent: replyContent,
-                replyImageURL: replyImageURL,
+            const userId = req.body.userId;
+            const text = req.body.text;
+            const imageURL = req.body.imageURL;
+            const parentTweetId = req.body.parentTweetId;
+            const tweetReply = await TweetService.saveTweetReply({
+                text: text,
+                imageURL: imageURL,
                 parentTweetId: parentTweetId,
+                userId: userId,
             });
             return res.json(tweetReply);
         } catch (error) {
+            console.log(error);
             return res.status(500).json({
                 success: false,
                 message: 'Something went wrong',
